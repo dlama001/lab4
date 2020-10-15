@@ -1,0 +1,310 @@
+---
+title: "lab4"
+author: "dawa lama"
+date: "10/14/2020"
+output:
+  word_document: default
+  html_document: default
+---
+read.csv("acs2017_ny_data")
+
+rea```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on usng R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+
+> use_varb <- (AGE >= 25) & (AGE <= 55) & (LABFORCE == 2) & (WKSWORK2 > 4) & (UHRSWORK >= 35)
+> dat_use <- subset(acs2017_ny,use_varb) # 
+> detach()
+> attach(dat_use)
+
+
+model_temp1 <- lm(INCWAGE ~ AGE + female + AfAm + Asian + Amindian + race_oth + Hispanic + educ_hs + educ_somecoll + educ_college + educ_advdeg)
+summary(model_temp1)
+plot(model_temp1)
+# maybe get fancy
+require(stargazer)
+stargazer(model_temp1, type = "text")
+# play with stargazer instead of summary, it can look nicer!
+
+Call:
+lm(formula = INCWAGE ~ AGE + female + AfAm + Asian + Amindian + 
+    race_oth + Hispanic + educ_hs + educ_somecoll + educ_college + 
+    educ_advdeg)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-148088  -33205  -10708   13053  625543 
+
+Coefficients:
+               Estimate Std. Error t value Pr(>|t|)    
+(Intercept)    -7096.25    2446.71  -2.900 0.003730 ** 
+AGE             1316.69      39.66  33.199  < 2e-16 ***
+female        -24939.46     720.43 -34.617  < 2e-16 ***
+AfAm          -11934.26    1130.37 -10.558  < 2e-16 ***
+Asian            566.53    1369.83   0.414 0.679188    
+Amindian       -8858.57    6077.71  -1.458 0.144971    
+race_oth       -7526.49    1272.49  -5.915 3.35e-09 ***
+Hispanic       -4224.82    1183.47  -3.570 0.000358 ***
+educ_hs        10592.37    1814.71   5.837 5.35e-09 ***
+educ_somecoll  22461.39    1857.67  12.091  < 2e-16 ***
+educ_college   57155.71    1830.96  31.216  < 2e-16 ***
+educ_advdeg    82766.43    1878.64  44.057  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 76760 on 46959 degrees of freedom
+Multiple R-squared:   0.15,	Adjusted R-squared:  0.1498 
+F-statistic: 753.6 on 11 and 46959 DF,  p-value: < 2.2e-16
+
+> plot(model_temp1)
+Hit <Return> to see next plot: # maybe get fancy
+Hit <Return> to see next plot: require(stargazer)
+Hit <Return> to see next plot: stargazer(model_temp1, type = "text")
+Hit <Return> to see next plot: # play with stargazer instead of summary, it can look nicer!
+> plot(pressure)
+> plot(pressure)
+> require(AER)
+
+require(AER)
+
+
+
+model_WhatTypeOfCollegeShouldIGoTo <- lm(INCWAGE ~ educ_hs + educ_somecoll + educ_college + educ_advdeg, data = dat_use)
+summary(model_WhatTypeOfCollegeShouldIGoTo)
+
+Call:
+lm(formula = INCWAGE ~ educ_hs + educ_somecoll + educ_college + 
+    educ_advdeg, data = dat_use)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-113149  -33770  -13514   11793  604230 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)      33770       1685  20.040  < 2e-16 ***
+educ_hs          12437       1831   6.792 1.12e-11 ***
+educ_somecoll    20744       1863  11.136  < 2e-16 ***
+educ_college     52749       1821  28.965  < 2e-16 ***
+educ_advdeg      79379       1864  42.575  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 78840 on 46966 degrees of freedom
+Multiple R-squared:  0.1031,	Adjusted R-squared:  0.103 
+F-statistic:  1349 on 4 and 46966 DF,  p-value: < 2.2e-16
+
+
+
+model_HighSchool <- lm(INCWAGE ~ educ_hs, data = dat_use)
+summary(model_HighSchool)
+
+Call:
+lm(formula = INCWAGE ~ educ_hs, data = dat_use)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-81609 -38609 -16207  11793 591793 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  81608.9      438.1  186.28   <2e-16 ***
+educ_hs     -35402.4      862.6  -41.04   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 81790 on 46969 degrees of freedom
+Multiple R-squared:  0.03462,	Adjusted R-squared:  0.0346 
+F-statistic:  1684 on 1 and 46969 DF,  p-value: < 2.2e-16
+
+
+model_WhatMajorShouldIChoose <- lm(INCWAGE ~ DEGFIELD, data = dat_use)
+summary(model_WhatMajorShouldIChoose)
+
+Call:
+lm(formula = INCWAGE ~ DEGFIELD, data = dat_use)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-171675  -32471  -13471   11529  589529 
+
+Coefficients:
+                                                                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                                                         48470.8      505.4  95.910  < 2e-16 ***
+DEGFIELDAgriculture                                                 20751.1     8438.7   2.459 0.013935 *  
+DEGFIELDEnvironment and Natural Resources                           27055.3     6806.2   3.975 7.05e-05 ***
+DEGFIELDArchitecture                                                51002.2     5055.2  10.089  < 2e-16 ***
+DEGFIELDArea, Ethnic, and Civilization Studies                      49568.0     7312.5   6.779 1.23e-11 ***
+DEGFIELDCommunications                                              35044.0     2395.4  14.630  < 2e-16 ***
+DEGFIELDCommunication Technologies                                  48524.9    11595.5   4.185 2.86e-05 ***
+DEGFIELDComputer and Information Sciences                           57652.0     2602.7  22.151  < 2e-16 ***
+DEGFIELDCosmetology Services and Culinary Arts                        561.4    14856.9   0.038 0.969859    
+DEGFIELDEducation Administration and Teaching                       22112.1     1891.1  11.693  < 2e-16 ***
+DEGFIELDEngineering                                                 69601.6     2146.1  32.432  < 2e-16 ***
+DEGFIELDEngineering Technologies                                    28720.6     7684.3   3.738 0.000186 ***
+DEGFIELDLinguistics and Foreign Languages                           53249.1     5309.3  10.029  < 2e-16 ***
+DEGFIELDFamily and Consumer Sciences                                28901.4     7993.5   3.616 0.000300 ***
+DEGFIELDLaw                                                         27037.2    11122.9   2.431 0.015071 *  
+DEGFIELDEnglish Language, Literature, and Composition               47229.3     2731.1  17.293  < 2e-16 ***
+DEGFIELDLiberal Arts and Humanities                                 43951.3     4756.3   9.241  < 2e-16 ***
+DEGFIELDLibrary Science                                              6422.1    21004.7   0.306 0.759800    
+DEGFIELDBiology and Life Sciences                                   70654.7     2544.0  27.773  < 2e-16 ***
+DEGFIELDMathematics and Statistics                                  74701.5     4297.1  17.384  < 2e-16 ***
+DEGFIELDMilitary Technologies                                       53779.2    55559.5   0.968 0.333070    
+DEGFIELDInterdisciplinary and Multi-Disciplinary Studies (General)  51885.6     6012.2   8.630  < 2e-16 ***
+DEGFIELDPhysical Fitness, Parks, Recreation, and Leisure            35348.6     6683.3   5.289 1.23e-07 ***
+DEGFIELDPhilosophy and Religious Studies                            40352.8     5707.5   7.070 1.57e-12 ***
+DEGFIELDTheology and Religious Vocations                            19856.1     8910.6   2.228 0.025860 *  
+DEGFIELDPhysical Sciences                                           58031.3     3315.3  17.504  < 2e-16 ***
+DEGFIELDNuclear, Industrial Radiology, and Biological Technologies 153204.2    39288.1   3.900 9.65e-05 ***
+DEGFIELDPsychology                                                  34783.4     2194.2  15.852  < 2e-16 ***
+DEGFIELDCriminal Justice and Fire Protection                        28714.8     3734.1   7.690 1.50e-14 ***
+DEGFIELDPublic Affairs, Policy, and Social Work                     20503.6     4266.2   4.806 1.54e-06 ***
+DEGFIELDSocial Sciences                                             73672.2     1757.8  41.912  < 2e-16 ***
+DEGFIELDConstruction Services                                       16461.4    14856.9   1.108 0.267869    
+DEGFIELDElectrical and Mechanic Repairs and Technologies            23229.2    32079.9   0.724 0.469005    
+DEGFIELDTransportation Sciences and Technologies                    40792.4    12755.7   3.198 0.001385 ** 
+DEGFIELDFine Arts                                                   26271.5     2136.9  12.294  < 2e-16 ***
+DEGFIELDMedical and Health Sciences and Services                    38250.2     2103.3  18.186  < 2e-16 ***
+DEGFIELDBusiness                                                    59284.5     1237.7  47.899  < 2e-16 ***
+DEGFIELDHistory                                                     61456.6     3437.4  17.879  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 78570 on 46933 degrees of freedom
+Multiple R-squared:  0.1099,	Adjusted R-squared:  0.1092 
+F-statistic: 156.6 on 37 and 46933 DF,  p-value: < 2.2e-16
+
+
+model_MaleOrFemale <- lm(INCWAGE ~ female, data = dat_use)
+summary(model_MaleOrFemale)
+Call:
+lm(formula = INCWAGE ~ female, data = dat_use)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-80964 -39212 -18212  12788 575788 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  80963.9      515.9  156.95   <2e-16 ***
+female      -18752.3      766.8  -24.45   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 82720 on 46969 degrees of freedom
+Multiple R-squared:  0.01257,	Adjusted R-squared:  0.01255 
+F-statistic:   598 on 1 and 46969 DF,  p-value: < 2.2e-16
+
+NNobs <- length(INCWAGE)
+set.seed(12345) 
+graph_obs <- (runif(NNobs) < 0.1)
+dat_graph <-subset(dat_use,graph_obs) 
+
+odel_Age <- lm(INCWAGE ~ AGE, data = dat_use)
+summary(model_Age)
+
+
+plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 16, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,150000), data = dat_graph)
+
+to_be_predicted_AGE <- data.frame(AGE = 25:55)
+
+to_be_predicted_AGE$yhat <- predict(model_Age, newdata = to_be_predicted_AGE)
+
+lines(yhat ~ AGE, data = to_be_predicted_AGE)
+
+model_MarriedOrUnmarried <- lm(INCWAGE ~ unmarried, data = dat_use)
+summary(model_MarriedOrUnmarried)
+Call:
+lm(formula = INCWAGE ~ unmarried, data = dat_use)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-79178 -39178 -18178  11034 580034 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  79177.7      461.1  171.71   <2e-16 ***
+unmarried   -21211.6      820.4  -25.85   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 82660 on 46969 degrees of freedom
+Multiple R-squared:  0.01403,	Adjusted R-squared:  0.01401 
+F-statistic: 668.4 on 1 and 46969 DF,  p-value: < 2.2e-16
+
+
+model_RaceEthnicity <- lm(INCWAGE ~ Hispanic +  white + AfAm + Amindian + Asian + race_oth, data = dat_use)
+summary(model_RaceEthnicity)
+Call:
+lm(formula = INCWAGE ~ Hispanic + white + AfAm + Amindian + Asian + 
+    race_oth, data = dat_use)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-79279 -39279 -18449  11034 598133 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)    58700       2934  20.004  < 2e-16 ***
+Hispanic      -16100       1301 -12.374  < 2e-16 ***
+white          20579       2932   7.019 2.26e-12 ***
+AfAm           -2734       3105  -0.881    0.379    
+Amindian       -1081       7074  -0.153    0.879    
+Asian          17458       2320   7.523 5.44e-14 ***
+race_oth        1848       2428   0.761    0.447    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 82460 on 46964 degrees of freedom
+Multiple R-squared:  0.01895,	Adjusted R-squared:  0.01883 
+F-statistic: 151.2 on 6 and 46964 DF,  p-value: < 2.2e-16
+
+> model_RaceEthnicity <- lm(INCWAGE ~ Hispanic +  white + Asian, data = dat_use)
+> summary(model_RaceEthnicity)
+
+Call:
+lm(formula = INCWAGE ~ Hispanic + white + Asian, data = dat_use)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-79150 -39150 -18355  11361 595361 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  57355.2      950.5   60.34   <2e-16 ***
+Hispanic    -14716.7     1162.6  -12.66   <2e-16 ***
+white        21795.1     1014.3   21.49   <2e-16 ***
+Asian        19794.4     1535.0   12.90   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 82460 on 46967 degrees of freedom
+Multiple R-squared:  0.01883,	Adjusted R-squared:  0.01876 
+F-statistic: 300.4 on 3 and 46967 DF,  p-value: < 2.2e-16
+
+
+You can also embed plots, for example:
+
+
+to_be_predicted2 <- data.frame(AGE = 25:55, female = 1, AfAm = 0, Asian = 0, Amindian = 1, race_oth = 1, Hispanic = 1, educ_hs = 0, educ_somecoll = 0, educ_college = 1, educ_advdeg = 0)
+to_be_predicted2$yhat <- predict(model_temp1, newdata = to_be_predicted2)
+
+lines(yhat ~ AGE, data = to_be_predicted2)
+```{r pressure, echo=FALSE}
+plot(pressure)
+to_be_predicted2 <- data.frame(AGE = 25:55, female = 1, AfAm = 0, Asian = 0, Amindian = 1, race_oth = 1, Hispanic = 1, educ_hs = 0, educ_somecoll = 0, educ_college = 1, educ_advdeg = 0)
+to_be_predicted2$yhat <- predict(model_temp1, newdata = to_be_predicted2)
+
+lines(yhat ~ AGE, data = to_be_predicted2)```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
